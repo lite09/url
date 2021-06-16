@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
@@ -16,33 +17,26 @@ namespace url
         private void button1_Click(object sender, EventArgs e)
         {
             string nacl_arch = Functions.get_arch();
-            string[] ids;
+            string f_urls = Functions.get_file_urls();
+            string[] ids = Functions.get_ids(Functions.get_file_urls());
             //string request = https://clients2.google.com/service/update2/crx?response=redirect&prodversion=${version}&acceptformat=crx2,crx3&x=id%3D${currentEXTId}%26uc&nacl_arch=${nacl_arch}
-
-
-
-            /*IWebDriver driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=ru&");
-            //driver.Navigate().GoToUrl("https://chrome.google.com/webstore/detail/view-image/jpcmhcelnjdmblfmjabdeclccemkghjk?hl=ru&");
-            //Assert.IsTrue(driver.Url.Contains("habr.com"), "Что-то не так =(");
-
-            Thread.Sleep(1800);
-            //var element = driver.FindElement(By.XPath(@"/html/body/div[5]/div[2]/div/div/div[2]/div[2]/div/div/div/div"));
-            var element = driver.FindElement(By.XPath(@"/html/body/div[5]/div[2]/div/div/div[2]/div[2]/div/div/div/div"));
-            element.Click();
-
-            driver.Quit();*/
 
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             //url = get_url_in_file(xml);
 
-            //var s = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture;
+            string cr_version = "91.0.4472.106";
             WebClient wc = new WebClient();
-            bool x64 = System.Environment.Is64BitOperatingSystem;
             wc.Encoding = Encoding.UTF8;
             try
             {
-                //file_xml_data = new StringReader(wc.DownloadString(url));
+                string url;
+                foreach (string id in ids)
+                {
+                    url ="https://clients2.google.com/service/update2/crx?response=redirect&prodversion=" + cr_version +
+                    "&acceptformat=crx2,crx3&x=id%3D" + id + "%26uc&nacl_arch=" + nacl_arch;
+                    wc.DownloadFile(url, "crx");
+
+                }
             }
             catch
             {
