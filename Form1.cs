@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Windows.Forms;
 
@@ -32,8 +34,12 @@ namespace url
                 string url;
                 foreach (string id in ids)
                 {
+                    string idl = "gighmmpiobklfepjocnamgkkbiglidom";
                     url ="https://clients2.google.com/service/update2/crx?response=redirect&prodversion=" + cr_version +
-                    "&acceptformat=crx2,crx3&x=id%3D" + id + "%26uc&nacl_arch=" + nacl_arch;
+                    "&acceptformat=crx2,crx3&x=id%3D" + idl + "%26uc&nacl_arch=" + nacl_arch;
+
+                    
+
                     wc.DownloadFile(url, "crx");
 
                 }

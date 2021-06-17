@@ -16,11 +16,13 @@ public static class Functions
     {
 		try
 		{
-			string url_txt = File.ReadAllText(file_urls);
+			string url_txt = File.ReadAllText(file_urls); url_txt += "\r\n";
 			string[] urls = Regex.Matches(url_txt, "(.*)\\r\\n").Cast<Match>().Select(l => l.Value.Trim()).ToArray();
 
             for (int i = 0; i < urls.Length; i++)
-				urls[i] = Regex.Match(urls[i], @"detail\/[^\/]+\/(\S+)[\/|\?]").Groups[1].Value;
+				urls[i] = Regex.Match(urls[i], @"detail\/[^\/]+\/([^\/|\?]+)").Groups[1].Value;
+
+			urls = urls.Distinct().ToArray();
 
 			return urls;
 		}
