@@ -1,5 +1,4 @@
-﻿using OpenQA.Selenium.Chrome;
-using System;
+﻿using System;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -23,10 +22,8 @@ namespace url
             string nacl_arch = Functions.get_arch();
             //string f_urls = Functions.get_file_urls();
             string[] ids = Functions.get_ids(Functions.get_file_urls());
-            // &x=id%3D${currentEXTId}%26uc
-            // &x=id%3D${currentEXTId}%26installsource%3Dondemand%26uc
+
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-            //url = get_url_in_file(xml);
             string cr_version = "91.0.4472.106";
 
             WebClient wc = new WebClient();
@@ -43,24 +40,17 @@ namespace url
                     url ="https://clients2.google.com/service/update2/crx?response=redirect&prodversion=" + cr_version +
                     "&acceptformat=crx2,crx3&x=id%3D" + id + "%26installsource%3Dondemand%26uc&nacl_arch=" + nacl_arch;
 
-                    wc.DownloadFile(url, "tmp\\crx.zip");
-
-
+                    wc.DownloadFile(url, "tmp\\crx.crx");
+                    Functions.unzip("tmp\\crx.crx", "tmp", id);
                 }
+                File.Delete("tmp\\crx.crx");
             }
-            catch
-            {
-                MessageBox.Show("Не удалось загрузить crx файл");
-
-
-            }
+            catch {  MessageBox.Show("Не удалось загрузить crx файл"); }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            ZipFile.ExtractToDirectory("tmp\\crx.zip", "tmp\\" + "id");
-            ZipFile.ExtractToDirectory("tmp\\crx.zip", "tmp\\" + "id");
-            //button1.PerformClick();
+            button1.PerformClick();
         }
 
         private void Form1_Activated(object sender, EventArgs e)

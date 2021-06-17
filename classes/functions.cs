@@ -3,6 +3,7 @@ using System.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Diagnostics;
 
 public static class Functions
 {
@@ -41,4 +42,23 @@ public static class Functions
 
 		return file_urls;
     }
+
+	public static void unzip(string file, string folder, string id)
+    {
+
+
+		using (Process copy = new Process())
+		{
+			//Process process = new Process();
+			copy.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+			copy.StartInfo.FileName = "u.exe";
+			copy.StartInfo.Arguments = "x -o" + folder + "\\" + id + " " + file;
+			//copy.StartInfo.UseShellExecute = false;
+			//copy.StartInfo.RedirectStandardOutput = true;
+			copy.Start();
+
+			copy.WaitForExit();
+		}
+	}
+
 }
