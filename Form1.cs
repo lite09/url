@@ -1,5 +1,7 @@
-﻿using System;
+﻿using OpenQA.Selenium.Chrome;
+using System;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
@@ -19,34 +21,36 @@ namespace url
         private void button1_Click(object sender, EventArgs e)
         {
             string nacl_arch = Functions.get_arch();
-            string f_urls = Functions.get_file_urls();
+            //string f_urls = Functions.get_file_urls();
             string[] ids = Functions.get_ids(Functions.get_file_urls());
-            //string request = https://clients2.google.com/service/update2/crx?response=redirect&prodversion=${version}&acceptformat=crx2,crx3&x=id%3D${currentEXTId}%26uc&nacl_arch=${nacl_arch}
-
+            // &x=id%3D${currentEXTId}%26uc
+            // &x=id%3D${currentEXTId}%26installsource%3Dondemand%26uc
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             //url = get_url_in_file(xml);
-
             string cr_version = "91.0.4472.106";
+
             WebClient wc = new WebClient();
             wc.Encoding = Encoding.UTF8;
             try
             {
+                if (Directory.Exists("tmp")) Directory.Delete("tmp");
+                Directory.CreateDirectory("tmp");
+
                 string url;
                 foreach (string id in ids)
                 {
-                    string idl = "gighmmpiobklfepjocnamgkkbiglidom";
+                    //string idl = "gighmmpiobklfepjocnamgkkbiglidom";
                     url ="https://clients2.google.com/service/update2/crx?response=redirect&prodversion=" + cr_version +
-                    "&acceptformat=crx2,crx3&x=id%3D" + idl + "%26uc&nacl_arch=" + nacl_arch;
+                    "&acceptformat=crx2,crx3&x=id%3D" + id + "%26installsource%3Dondemand%26uc&nacl_arch=" + nacl_arch;
 
-                    
+                    wc.DownloadFile(url, "tmp\\crx.zip");
 
-                    wc.DownloadFile(url, "crx");
 
                 }
             }
             catch
             {
-                MessageBox.Show("Не удалось загрузить crs файл");
+                MessageBox.Show("Не удалось загрузить crx файл");
 
 
             }
@@ -54,12 +58,19 @@ namespace url
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            ZipFile.ExtractToDirectory("tmp\\crx.zip", "tmp\\" + "id");
+            ZipFile.ExtractToDirectory("tmp\\crx.zip", "tmp\\" + "id");
             //button1.PerformClick();
         }
 
         private void Form1_Activated(object sender, EventArgs e)
         {
-            button1.PerformClick();
+
+            /*ChromeOptions options = new ChromeOptions();
+            options.AddArguments(@"load-extension=C:/Users/и/source/repos/url/bin/Debug/tmp/crx");
+            ChromeDriver driver = new ChromeDriver(options);*/
+
+            //button1.PerformClick();
         }
     }
 }
