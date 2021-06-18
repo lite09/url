@@ -43,22 +43,35 @@ public static class Functions
 		return file_urls;
     }
 
-	public static void unzip(string file, string folder, string id)
+	public static void unzip(string file, string folder, string unzip_file = "")
     {
 
 
-		using (Process copy = new Process())
+		using (Process uzip = new Process())
 		{
-			//Process process = new Process();
-			copy.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-			copy.StartInfo.FileName = "u.exe";
-			copy.StartInfo.Arguments = "x -o" + folder + "\\" + id + " " + file;
-			//copy.StartInfo.UseShellExecute = false;
-			//copy.StartInfo.RedirectStandardOutput = true;
-			copy.Start();
+			uzip.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+			uzip.StartInfo.FileName = "u.exe";
+			uzip.StartInfo.Arguments = "x -y -o" + folder + /*"\\" + id +*/ " " + file + " " + unzip_file;
+			//uzip.StartInfo.UseShellExecute = false;
+			//uzip.StartInfo.RedirectStandardOutput = true;
+			uzip.Start();
 
-			copy.WaitForExit();
+			uzip.WaitForExit();
 		}
+	}
+
+	public static bool ex_cls()
+    {
+		string ex_cls;
+		try
+		{
+			string conf = File.ReadAllText("config.txt", Encoding.Default);
+			ex_cls = Regex.Match(conf, "ex_cls:\\s*(\\S+)$").Groups[1].Value;
+
+			if (ex_cls == "1") return true;
+			else return false;
+		}
+		catch { return false; }
 	}
 
 }
